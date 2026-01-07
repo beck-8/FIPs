@@ -207,7 +207,12 @@ The sigmoid function provides:
 
 **Sigmoid steepness (6.0):** Tested values [2, 4, 6, 8, 10]. Value 6.0 provides clear transition zone without being too abrupt - 95% of transition occurs between duplication factors 2.0-4.0.
 
-**Center point (3.0):** Middle of duplication range for typical 5-block tipsets, representing "moderate" duplication requiring balanced consideration. This parameter choice prioritizes minimizing impact on normal operations while still providing strong attack mitigation.
+**Center point (3.0):** Balances execution and space dimensions when normalized duplication reaches 0.5. Due to the normalization formula `(dup - 1) / (num_blocks - 1)`, this adapts automatically to different tipset sizes:
+- 5-block tipset: 50% weight when ~3 blocks contain the same message
+- 10-block tipset: 50% weight when ~6 blocks contain the same message
+- 11-block tipset: 50% weight when ~6 blocks contain the same message
+
+This parameter choice prioritizes minimizing impact on normal operations while still providing strong attack mitigation, regardless of tipset size.
 
 Alternative values considered:
 - **center=2.5 (more aggressive)**: Would reach 50% space weight at duplication factor 2.5, responding more quickly to duplication. At dup=2.0, space weight would be ~38% (vs 18% with center=3.0). This is more conservative for network protection but may impact normal multi-block message inclusion.
